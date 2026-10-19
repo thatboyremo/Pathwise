@@ -1,0 +1,637 @@
+/* =========================================================
+   Pathwise DJANGO SIDEBAR
+   Matches the React Sidebar design
+========================================================= */
+
+
+/* =========================================================
+   ROOT / SIDEBAR
+========================================================= */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 256px;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #ffffff;
+
+    border-right: 1px solid #e6e7e1;
+
+    z-index: 1000;
+
+    font-family:
+        "DM Sans",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    color: #59655d;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   TOP SECTION
+========================================================= */
+
+.sidebar-top {
+    padding: 24px 20px 20px;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.logo {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    text-decoration: none;
+
+    margin-bottom: 20px;
+}
+
+
+.logo-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    background: #0f3d2e;
+
+    border-radius: 12px;
+
+    color: #f4b740;
+
+    font-size: 19px;
+}
+
+
+.logo-text {
+    min-width: 0;
+}
+
+
+.logo-text h3 {
+    margin: 0;
+
+    color: #0f3d2e;
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size: 20px;
+    font-weight: 700;
+
+    line-height: 1.1;
+}
+
+
+.logo-text h3 em {
+    color: #f4b740;
+
+    font-style: normal;
+}
+
+
+.logo-text small {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #8b978f;
+
+    font-size: 10px;
+    font-weight: 500;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   NEW INTERVIEW BUTTON
+========================================================= */
+
+.new-btn {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 12px 14px;
+
+    background: #0f3d2e;
+
+    color: #ffffff;
+
+    border-radius: 12px;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.new-btn i {
+    font-size: 15px;
+
+    color: #f4b740;
+}
+
+
+.new-btn:hover {
+    background: #124b38;
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 5px 15px rgba(15, 61, 46, 0.15);
+}
+
+
+/* =========================================================
+   SCROLLABLE CONTENT
+========================================================= */
+
+.sidebar-group {
+    padding: 0 20px;
+
+    margin-bottom: 8px;
+}
+
+
+/* =========================================================
+   SECTION TITLES
+========================================================= */
+
+.group-title {
+    display: block;
+
+    padding: 0 8px;
+
+    margin: 10px 0 10px;
+
+    color: #8b978f;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.14em;
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.sidebar nav {
+    width: 100%;
+}
+
+
+.sidebar nav a {
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   NAV ITEM
+========================================================= */
+
+.nav-item {
+    position: relative;
+
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 11px 12px;
+
+    margin-bottom: 3px;
+
+    border-radius: 12px;
+
+    color: #59655d;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.nav-item i {
+    width: 20px;
+
+    flex-shrink: 0;
+
+    text-align: center;
+
+    font-size: 17px;
+
+    color: #8b978f;
+
+    transition: color 0.2s ease;
+}
+
+
+.nav-item span:not(.badge-count) {
+    flex: 1;
+}
+
+
+/* =========================================================
+   NAV HOVER
+========================================================= */
+
+.nav-item:hover {
+    background: #eef2ec;
+
+    color: #0f3d2e;
+
+    text-decoration: none;
+}
+
+
+.nav-item:hover i {
+    color: #0f3d2e;
+}
+
+
+/* =========================================================
+   ACTIVE NAV ITEM
+========================================================= */
+
+.nav-item.active {
+    background: #0f3d2e;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 4px 12px rgba(15, 61, 46, 0.15);
+}
+
+
+.nav-item.active i {
+    color: #f4b740;
+}
+
+
+.nav-item.active:hover {
+    background: #124b38;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   BADGES
+========================================================= */
+
+.badge-count {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 20px;
+
+    height: 20px;
+
+    padding: 0 6px;
+
+    box-sizing: border-box;
+
+    border-radius: 999px;
+
+    background: #eef2ec;
+
+    color: #0f3d2e;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    line-height: 1;
+}
+
+
+.nav-item.active .badge-count {
+    background: rgba(255, 255, 255, 0.18);
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   UPGRADE CARD
+========================================================= */
+
+.sidebar-upgrade {
+    margin: auto 20px 16px;
+
+    padding: 18px;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #062b20 0%,
+            #0f3d2e 55%,
+            #15543f 100%
+        );
+
+    color: #ffffff;
+
+    box-sizing: border-box;
+}
+
+
+.upgrade-icon {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 12px;
+
+    border-radius: 11px;
+
+    background: #f4b740;
+
+    color: #1b1300;
+
+    font-size: 16px;
+}
+
+
+.sidebar-upgrade h3 {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.sidebar-upgrade p {
+    margin: 8px 0 0;
+
+    color: rgba(255, 255, 255, 0.78);
+
+    font-size: 10px;
+
+    line-height: 1.55;
+}
+
+
+.sidebar-upgrade button {
+    width: 100%;
+
+    margin-top: 14px;
+
+    padding: 10px 12px;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    background: #f4b740;
+
+    color: #1b1300;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.sidebar-upgrade button:hover {
+    background: #efab2f;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   USER SECTION
+========================================================= */
+
+.sidebar-user {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    padding: 16px 20px;
+
+    border-top: 1px solid #eef2ec;
+}
+
+
+.avatar {
+    width: 40px;
+    height: 40px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #0f3d2e;
+
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+.user-info {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+.user-info strong {
+    color: #0f3d2e;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+.plan-badge {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 4px;
+
+    margin-top: 3px;
+
+    color: #7d8a83;
+
+    font-size: 9px;
+    font-weight: 500;
+}
+
+
+.plan-badge i {
+    color: #f4b740;
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   FOOTER / LOGOUT
+========================================================= */
+
+.sidebar-footer {
+    padding: 0 20px 20px;
+}
+
+
+.logout-btn {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 11px 12px;
+
+    box-sizing: border-box;
+
+    border-radius: 12px;
+
+    color: #59655d;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.logout-btn i {
+    width: 20px;
+
+    text-align: center;
+
+    font-size: 17px;
+}
+
+
+.logout-btn:hover {
+    background: #eef2ec;
+
+    color: #0f3d2e;
+
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   MAIN DJANGO CONTENT OFFSET
+========================================================= */
+
+.main-content,
+.interview-page,
+.page-content {
+    margin-left: 256px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1024px) {
+
+    .sidebar {
+        width: 230px;
+    }
+
+    .main-content,
+    .interview-page,
+    .page-content {
+        margin-left: 230px;
+    }
+
+}
+
+
+@media (max-width: 768px) {
+
+    .sidebar {
+        display: none;
+    }
+
+    .main-content,
+    .interview-page,
+    .page-content {
+        margin-left: 0;
+    }
+
+}

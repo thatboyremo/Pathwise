@@ -1,0 +1,36 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Django
+db.sqlite3
+*.sqlite3
+media/
+staticfiles/
+
+# Node
+node_modules/
+frontend/node_modules/
+frontend/.output/
+frontend/dist/
+frontend/.vinxi/
+frontend/.tanstack/
+frontend/.nitro/
+
+# Logs and OS
+*.log
+.DS_Store
+Thumbs.db

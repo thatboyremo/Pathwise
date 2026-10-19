@@ -1,0 +1,969 @@
+/* =========================================================
+   AI Interview Report
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+
+    --primary:#16a34a;
+    --primary-dark:#15803d;
+    --primary-light:#dcfce7;
+
+    --success:#16a34a;
+    --warning:#f59e0b;
+    --danger:#dc2626;
+
+    --text:#111827;
+    --muted:#6b7280;
+
+    --card:#ffffff;
+    --background:#f8fafc;
+    --border:#e5e7eb;
+
+    --shadow:
+        0 10px 30px rgba(0,0,0,.06);
+
+    --radius:18px;
+
+}
+
+body{
+
+    background:var(--background);
+
+    color:var(--text);
+
+    font-family:
+        "Inter",
+        "Segoe UI",
+        sans-serif;
+
+}
+
+.main{
+
+    padding:35px;
+
+    min-height:100vh;
+
+    background:var(--background);
+
+}
+
+section{
+
+    margin-bottom:30px;
+
+}
+
+/* =========================================================
+   REPORT HEADER
+========================================================= */
+
+.report-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:25px;
+
+    background:var(--card);
+
+    border-radius:20px;
+
+    padding:30px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.report-header h1{
+
+    margin-top:12px;
+
+    font-size:34px;
+
+    color:var(--text);
+
+}
+
+.report-header h2{
+
+    margin-top:6px;
+
+    color:var(--muted);
+
+    font-size:18px;
+
+    font-weight:500;
+
+}
+
+.report-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:8px 16px;
+
+    border-radius:50px;
+
+    background:var(--primary-light);
+
+    color:var(--primary-dark);
+
+    font-weight:600;
+
+    font-size:14px;
+
+}
+
+.meta{
+
+    display:flex;
+
+    gap:18px;
+
+    flex-wrap:wrap;
+
+    margin-top:18px;
+
+}
+
+.meta span{
+
+    color:var(--muted);
+
+    font-size:14px;
+
+}
+
+.status{
+
+    padding:10px 18px;
+
+    border-radius:50px;
+
+    font-weight:600;
+
+}
+
+.status.completed{
+
+    background:#dcfce7;
+
+    color:#15803d;
+
+}
+
+.status.pending{
+
+    background:#fef3c7;
+
+    color:#92400e;
+
+}
+
+/* =========================================================
+   OVERALL SCORE
+========================================================= */
+
+.overall-card{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:40px;
+
+    flex-wrap:wrap;
+
+    background:var(--card);
+
+    border-radius:20px;
+
+    padding:35px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.score-circle{
+
+    width:170px;
+
+    height:170px;
+
+    border-radius:50%;
+
+    border:12px solid var(--primary);
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    flex-shrink:0;
+
+    background:white;
+
+}
+
+.score-circle span{
+
+    font-size:54px;
+
+    font-weight:700;
+
+    color:var(--primary);
+
+    line-height:1;
+
+}
+
+.score-circle small{
+
+    margin-top:8px;
+
+    color:var(--muted);
+
+    font-size:14px;
+
+}
+
+.score-info{
+
+    flex:1;
+
+}
+
+.score-info h2{
+
+    font-size:34px;
+
+    margin-bottom:12px;
+
+    color:var(--primary-dark);
+
+}
+
+.score-info p{
+
+    color:var(--muted);
+
+    line-height:1.8;
+
+    max-width:700px;
+
+}
+
+/* =========================================================
+   PERFORMANCE BREAKDOWN
+========================================================= */
+
+.performance-section{
+
+    background:var(--card);
+
+    border-radius:20px;
+
+    padding:30px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.section-title{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:25px;
+
+    font-size:22px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.section-title i{
+
+    color:var(--primary);
+
+}
+
+.performance-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+    gap:22px;
+
+}
+
+.performance-card{
+
+    background:#ffffff;
+
+    border:1px solid var(--border);
+
+    border-top:5px solid var(--primary);
+
+    border-radius:18px;
+
+    padding:25px;
+
+    text-align:center;
+
+    transition:.3s ease;
+
+}
+
+.performance-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 12px 30px rgba(22,163,74,.12);
+
+}
+
+.card-icon{
+
+    width:65px;
+
+    height:65px;
+
+    margin:0 auto 18px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:var(--primary-light);
+
+}
+
+.card-icon i{
+
+    font-size:26px;
+
+    color:var(--primary);
+
+}
+
+.performance-card h4{
+
+    font-size:17px;
+
+    font-weight:600;
+
+    color:var(--text);
+
+    margin-bottom:18px;
+
+}
+
+.performance-card .score{
+
+    font-size:34px;
+
+    font-weight:700;
+
+    color:var(--primary-dark);
+
+}
+
+.performance-card small{
+
+    display:block;
+
+    margin-top:8px;
+
+    color:var(--muted);
+
+    font-size:13px;
+
+}
+
+/* =========================================================
+   STRENGTHS & WEAKNESSES
+========================================================= */
+
+.insights-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+
+    gap:25px;
+
+}
+
+.insight-card{
+
+    background:var(--card);
+
+    border-radius:20px;
+
+    padding:30px;
+
+    box-shadow:var(--shadow);
+
+    border-top:5px solid var(--primary);
+
+}
+
+.insight-list{
+
+    list-style:none;
+
+    margin-top:20px;
+
+}
+
+.insight-list li{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:12px;
+
+    padding:14px 0;
+
+    border-bottom:1px solid var(--border);
+
+    color:var(--text);
+
+    line-height:1.6;
+
+}
+
+.insight-list li:last-child{
+
+    border-bottom:none;
+
+}
+
+.insight-list.success i{
+
+    color:var(--success);
+
+    font-size:18px;
+
+    margin-top:3px;
+
+}
+
+.insight-list.warning i{
+
+    color:var(--warning);
+
+    font-size:18px;
+
+    margin-top:3px;
+
+}
+
+.insight-card p{
+
+    color:var(--muted);
+
+    line-height:1.8;
+
+    margin-top:18px;
+
+}
+
+.insight-card:first-child{
+
+    border-top:5px solid var(--success);
+
+}
+
+.insight-card:last-child{
+
+    border-top:5px solid var(--warning);
+
+}
+
+/* =========================================================
+   AI SUMMARY
+========================================================= */
+
+.summary-card{
+
+    background:linear-gradient(
+        135deg,
+        #ffffff,
+        #f0fdf4
+    );
+
+    border-left:6px solid var(--primary);
+
+    border-radius:20px;
+
+    padding:35px;
+
+    box-shadow:var(--shadow);
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.summary-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:-60px;
+
+    right:-60px;
+
+    width:180px;
+
+    height:180px;
+
+    border-radius:50%;
+
+    background:rgba(34,197,94,.08);
+
+}
+
+.summary-card .section-title{
+
+    margin-bottom:20px;
+
+}
+
+.summary-card .section-title i{
+
+    font-size:28px;
+
+    color:var(--primary);
+
+}
+
+.summary-card p{
+
+    font-size:16px;
+
+    line-height:1.9;
+
+    color:var(--text);
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+.summary-card strong{
+
+    color:var(--primary-dark);
+
+}
+
+.summary-card em{
+
+    font-style:italic;
+
+    color:var(--muted);
+
+}
+
+/* =========================================================
+   QUESTION REVIEW
+========================================================= */
+
+.question-review{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:30px;
+
+}
+
+.question-card{
+
+    background:var(--card);
+
+    border-radius:20px;
+
+    padding:30px;
+
+    box-shadow:var(--shadow);
+
+    border-left:5px solid var(--primary);
+
+}
+
+.question-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+}
+
+.question-number{
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.question-score{
+
+    background:var(--primary);
+
+    color:#fff;
+
+    padding:8px 18px;
+
+    border-radius:30px;
+
+    font-weight:700;
+
+    font-size:15px;
+
+}
+
+.question-block{
+
+    background:#f8fafc;
+
+    border-left:4px solid var(--primary);
+
+    padding:20px;
+
+    border-radius:12px;
+
+    margin-bottom:20px;
+
+}
+
+.question-block strong{
+
+    display:block;
+
+    margin-bottom:10px;
+
+    color:var(--primary-dark);
+
+}
+
+.question-block p{
+
+    color:var(--text);
+
+    line-height:1.8;
+
+}
+
+.answer-block{
+
+    background:#ffffff;
+
+    border:1px solid var(--border);
+
+    padding:20px;
+
+    border-radius:12px;
+
+    margin-bottom:20px;
+
+}
+
+.answer-block strong{
+
+    display:block;
+
+    margin-bottom:10px;
+
+    color:#2563eb;
+
+}
+
+.answer-block p{
+
+    color:var(--text);
+
+    line-height:1.8;
+
+}
+
+.feedback-block{
+
+    background:#f0fdf4;
+
+    border-left:4px solid var(--success);
+
+    padding:20px;
+
+    border-radius:12px;
+
+    margin-bottom:25px;
+
+}
+
+.feedback-block strong{
+
+    display:block;
+
+    margin-bottom:10px;
+
+    color:var(--success);
+
+}
+
+.feedback-block p{
+
+    line-height:1.8;
+
+    color:var(--text);
+
+}
+
+.feedback-block{
+
+    background:#f0fdf4;
+
+    border-left:4px solid var(--success);
+
+    padding:20px;
+
+    border-radius:12px;
+
+    margin-bottom:25px;
+
+}
+
+.feedback-block strong{
+
+    display:block;
+
+    margin-bottom:10px;
+
+    color:var(--success);
+
+}
+
+.feedback-block p{
+
+    line-height:1.8;
+
+    color:var(--text);
+
+}
+
+.mini-score-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+
+    gap:18px;
+
+}
+
+.mini-score-grid div{
+
+    background:#ffffff;
+
+    border:1px solid var(--border);
+
+    border-radius:15px;
+
+    padding:18px;
+
+    text-align:center;
+
+    transition:.3s;
+
+}
+
+.mini-score-grid div:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+}
+
+.mini-score-grid span{
+
+    display:block;
+
+    color:var(--muted);
+
+    font-size:13px;
+
+    margin-bottom:8px;
+
+}
+
+.mini-score-grid strong{
+
+    font-size:24px;
+
+    color:var(--primary-dark);
+
+}
+
+.pending-answer{
+
+    margin-top:20px;
+
+    padding:18px;
+
+    border-radius:12px;
+
+    background:#fff7ed;
+
+    border-left:4px solid #f59e0b;
+
+    color:#92400e;
+
+    font-weight:600;
+
+}
+
+/* ==========================================
+   6H. RESPONSIVE DESIGN
+========================================== */
+
+@media (max-width:1200px){
+
+    .performance-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+}
+
+@media (max-width:992px){
+
+    .report-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:25px;
+    }
+
+    .overall-card{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .score-circle{
+        margin:auto;
+    }
+
+    .performance-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .insights-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media (max-width:768px){
+
+    .main{
+        padding:20px;
+    }
+
+    .report-header h1{
+        font-size:28px;
+    }
+
+    .report-header h2{
+        font-size:18px;
+    }
+
+    .performance-grid{
+        grid-template-columns:1fr;
+    }
+
+    .mini-score-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .report-actions{
+        flex-direction:column;
+    }
+
+    .btn{
+        width:100%;
+        justify-content:center;
+    }
+
+}
+
+@media (max-width:500px){
+
+    .meta{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:8px;
+    }
+
+    .overall-card{
+        padding:25px;
+    }
+
+    .score-circle{
+        width:130px;
+        height:130px;
+    }
+
+    .score-circle span{
+        font-size:38px;
+    }
+
+    .mini-score-grid{
+        grid-template-columns:1fr;
+    }
+
+}

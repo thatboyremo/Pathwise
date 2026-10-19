@@ -1,0 +1,583 @@
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/result.css' %}">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<div class="app">
+
+    {% include "partials/sidebar.html" %}
+
+    <main class="main">
+
+        <!-- ========================= -->
+        <!-- TOP HEADER -->
+        <!-- ========================= -->
+
+        <header class="report-header">
+
+            <div class="header-left">
+
+                <span class="report-badge">
+
+                    <i class="fa-solid fa-chart-line"></i>
+
+                    AI Interview Report
+
+                </span>
+
+                <h1>
+
+                    {{ session.company }}
+
+                </h1>
+
+                <h2>
+
+                    {{ session.job_role }}
+
+                </h2>
+
+                <div class="meta">
+
+                    <span>
+
+                        <i class="fa-solid fa-briefcase"></i>
+
+                        {{ session.get_interview_type_display }}
+
+                    </span>
+
+                    <span>
+
+                        <i class="fa-solid fa-layer-group"></i>
+
+                        {{ session.get_experience_level_display }}
+
+                    </span>
+
+                    <span>
+
+                        <i class="fa-solid fa-calendar"></i>
+
+                        {{ session.started_at|date:"M d, Y" }}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="header-right">
+
+                {% if completed %}
+
+                <span class="status completed">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    Completed
+
+                </span>
+
+                {% else %}
+
+                <span class="status pending">
+
+                    <i class="fa-solid fa-clock"></i>
+
+                    In Progress
+
+                </span>
+
+                {% endif %}
+
+            </div>
+
+        </header>
+
+        <!-- ========================= -->
+        <!-- OVERALL SCORE -->
+        <!-- ========================= -->
+
+        <section class="overall-card">
+
+            <div class="score-circle">
+
+                <span>
+
+                    {{ average_score }}
+
+                </span>
+
+                <small>
+
+                    Overall Score
+
+                </small>
+
+            </div>
+
+            <div class="score-info">
+
+                <h2>
+
+                    {{ session.recommendation }}
+
+                </h2>
+
+                <p>
+
+                    Based on your interview performance,
+                    AI evaluated your technical,
+                    communication and problem-solving skills.
+
+                </p>
+
+            </div>
+
+        </section>
+
+<!-- ========================= -->
+<!-- PERFORMANCE -->
+<!-- ========================= -->
+
+<section class="performance-section">
+
+    <div class="section-title">
+
+        <i class="fa-solid fa-chart-column"></i>
+
+        Performance Breakdown
+
+    </div>
+
+    <div class="performance-grid">
+
+        <!-- Communication -->
+
+        <div class="performance-card">
+
+            <div class="card-icon">
+
+                <i class="fa-solid fa-comments"></i>
+
+            </div>
+
+            <h4>Communication</h4>
+
+            <div class="score">
+
+                {{ session.report.communication|floatformat:0 }}%
+
+            </div>
+
+        </div>
+
+        <!-- Technical -->
+
+        <div class="performance-card">
+
+            <div class="card-icon">
+
+                <i class="fa-solid fa-code"></i>
+
+            </div>
+
+            <h4>Technical</h4>
+
+            <div class="score">
+
+                {{ session.report.technical|floatformat:0 }}%
+
+            </div>
+
+        </div>
+
+        <!-- Confidence -->
+
+        <div class="performance-card">
+
+            <div class="card-icon">
+
+                <i class="fa-solid fa-user-check"></i>
+
+            </div>
+
+            <h4>Confidence</h4>
+
+            <div class="score">
+
+                {{ session.report.confidence|floatformat:0 }}%
+
+            </div>
+
+        </div>
+
+        <!-- Problem Solving -->
+
+        <div class="performance-card">
+
+            <div class="card-icon">
+
+                <i class="fa-solid fa-puzzle-piece"></i>
+
+            </div>
+
+            <h4>Problem Solving</h4>
+
+            <div class="score">
+
+                {{ session.report.problem_solving|floatformat:0 }}%
+
+            </div>
+
+        </div>
+
+        <!-- Culture Fit -->
+
+        <div class="performance-card">
+
+            <div class="card-icon">
+
+                <i class="fa-solid fa-handshake"></i>
+
+            </div>
+
+            <h4>Culture Fit</h4>
+
+            <div class="score">
+
+                {{ session.report.culture_fit|floatformat:0 }}%
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ========================= -->
+<!-- STRENGTHS & WEAKNESSES -->
+<!-- ========================= -->
+
+<section class="insights-grid">
+
+    <!-- Strengths -->
+
+    <div class="insight-card">
+
+        <div class="section-title">
+
+            <i class="fa-solid fa-circle-check"></i>
+
+            Top Strengths
+
+        </div>
+
+        {% if session.report.strengths %}
+
+            <ul class="insight-list success">
+
+                {% for item in session.report.strengths %}
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        {{ item }}
+
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+        {% else %}
+
+            <p>No strengths recorded.</p>
+
+        {% endif %}
+
+    </div>
+
+    <!-- Weaknesses -->
+
+    <div class="insight-card">
+
+        <div class="section-title">
+
+            <i class="fa-solid fa-chart-line"></i>
+
+            Areas for Improvement
+
+        </div>
+
+        {% if session.report.weaknesses %}
+
+            <ul class="insight-list warning">
+
+                {% for item in session.report.weaknesses %}
+
+                    <li>
+
+                        <i class="fa-solid fa-arrow-up"></i>
+
+                        {{ item }}
+
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+        {% else %}
+
+            <p>No improvement suggestions.</p>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+<!-- ========================= -->
+<!-- AI SUMMARY -->
+<!-- ========================= -->
+
+<section class="summary-card">
+
+    <div class="section-title">
+
+        <i class="fa-solid fa-robot"></i>
+
+        AI Interview Summary
+
+    </div>
+
+    <p>
+
+        {{ session.report.summary }}
+
+    </p>
+
+</section>
+
+<!-- ========================= -->
+<!-- QUESTION REVIEW -->
+<!-- ========================= -->
+
+<section class="question-review">
+
+    <div class="section-title">
+
+        <i class="fa-solid fa-list-check"></i>
+
+        Question Review
+
+    </div>
+
+    {% for question in questions %}
+
+        <div class="question-card">
+
+            <div class="question-header">
+
+                <span class="question-number">
+
+                    Question {{ question.question_number }}
+
+                </span>
+
+                {% if question.answer %}
+
+                    <span class="question-score">
+
+                        {{ question.answer.overall_score|floatformat:0 }}/100
+
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+            <!-- AI Question -->
+
+            <div class="question-block">
+
+                <strong>
+
+                    <i class="fa-solid fa-robot"></i>
+
+                    AI Question
+
+                </strong>
+
+                <p>
+
+                    {{ question.question }}
+
+                </p>
+
+            </div>
+
+            {% if question.answer %}
+
+                <!-- Candidate Answer -->
+
+                <div class="answer-block">
+
+                    <strong>
+
+                        <i class="fa-solid fa-user"></i>
+
+                        Your Answer
+
+                    </strong>
+
+                    <p>
+
+                        {{ question.answer.answer }}
+
+                    </p>
+
+                </div>
+
+                <!-- Feedback -->
+
+                <div class="feedback-block">
+
+                    <strong>
+
+                        <i class="fa-solid fa-comments"></i>
+
+                        AI Feedback
+
+                    </strong>
+
+                    <p>
+
+                        {{ question.answer.feedback }}
+
+                    </p>
+
+                </div>
+
+                <!-- Score Grid -->
+
+                <div class="mini-score-grid">
+
+                    <div>
+
+                        <span>Technical</span>
+
+                        <strong>
+
+                            {{ question.answer.technical_score }}
+
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <span>Communication</span>
+
+                        <strong>
+
+                            {{ question.answer.communication_score }}
+
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <span>Confidence</span>
+
+                        <strong>
+
+                            {{ question.answer.confidence_score }}
+
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <span>Problem Solving</span>
+
+                        <strong>
+
+                            {{ question.answer.problem_solving_score }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            {% else %}
+
+                <div class="pending-answer">
+
+                    This question was not answered.
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    {% endfor %}
+
+</section>
+
+<!-- ========================= -->
+<!-- ACTION BUTTONS -->
+<!-- ========================= -->
+
+<section class="report-actions">
+
+    <a
+        href="{% url 'interview:interview_setup' %}"
+        class="btn btn-primary">
+
+        <i class="fa-solid fa-rotate"></i>
+
+        Retake Interview
+
+    </a>
+
+<a
+    href="{% url 'interview:download_report_pdf' session.id %}"
+    class="btn btn-secondary">
+
+    <i class="fa-solid fa-file-pdf"></i>
+
+    Download PDF
+
+</a>
+
+    <a
+        href="{% url 'dashboard:dashboard' %}"
+        class="btn btn-outline">
+
+        <i class="fa-solid fa-house"></i>
+
+        Dashboard
+
+    </a>
+
+</section>
+
+    </main>
+
+</div>
+
+{% endblock %}
+

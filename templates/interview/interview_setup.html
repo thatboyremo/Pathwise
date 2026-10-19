@@ -1,0 +1,521 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Career Assistant — Interview Setup</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/interview_setup.css' %}">
+
+</head>
+
+<body>
+
+{% block content %}
+<div class="layout">
+
+    {% include "partials/sidebar.html" %}
+
+    <main class="main">
+        <div class="setup-container">
+
+            <!-- ============ HERO ============ -->
+            <section class="hero">
+                <div>
+                    <span class="eyebrow"><span class="dot"></span>AI Mock Interview</span>
+                    <h1>
+                        Rehearse the <span class="accent">exact</span> interview
+                        <em>before it happens.</em>
+                    </h1>
+                    <p>
+                        Configure a realistic session tailored to the role, company and
+                        job description. Our AI will grill you like a real hiring panel —
+                        then give you actionable feedback.
+                    </p>
+
+                    <div class="hero-meta">
+                        <span class="chip">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
+                            Adaptive difficulty
+                        </span>
+                        <span class="chip">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12l4 4L21 4"/></svg>
+                            Scored per answer
+                        </span>
+                        <span class="chip">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                            15–30 min sessions
+                        </span>
+                    </div>
+                </div>
+
+                <aside class="hero-card">
+                    <span class="badge">✦ What you'll get</span>
+                    <h3>A full mock, tailored to your target role.</h3>
+                    <ul>
+                        <li>Role & company-specific questions</li>
+                        <li>Live scoring & rubric feedback</li>
+                        <li>Behavioral + technical coverage</li>
+                        <li>Downloadable performance report</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <!-- ============ FORM ============ -->
+            <form method="POST" enctype="multipart/form-data" class="setup-card">
+                {% csrf_token %}
+
+                <!-- SECTION 1 : ROLE -->
+                <div class="section">
+                    <div class="section-head">
+                        <div class="section-num">01</div>
+                        <div>
+                            <div class="section-title">Target role & company</div>
+                            <div class="section-sub">Tell us where you're interviewing so we can tailor every question.</div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Target job role</label>
+                            <input
+                                type="text"
+                                name="job_role"
+                                placeholder="e.g. Senior Software Engineer"
+                                required
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label>Company <small style="display:inline;color:var(--muted);font-weight:500">(optional)</small></label>
+                            <input type="text" name="company" placeholder="e.g. Google, Stripe, local startup…">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Job description</label>
+                        <textarea rows="6" name="job_description" placeholder="Paste the full job description here — the more detail, the sharper the questions."></textarea>
+                        <small class="help">Tip: paste the entire posting. We use it to mirror the interviewer's expectations.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Upload resume
+                            <small style="display:inline;color:var(--muted);font-weight:500">
+                                (optional)
+                            </small>
+                        </label>
+
+                        <div class="upload" id="resumeUpload">
+
+                            <div class="upload-icon" id="resumeIcon">
+                                <svg viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M12 3v14"/>
+                                    <path d="M5 10l7-7 7 7"/>
+                                    <path d="M4 21h16"/>
+                                </svg>
+                            </div>
+
+                            <div class="upload-title" id="resumeTitle">
+                                Drop your PDF or Word file here
+                            </div>
+
+                            <div class="upload-sub" id="resumeSub">
+                                or click to browse — max 5MB
+                            </div>
+
+                            <input
+                                type="file"
+                                id="resumeInput"
+                                name="resume"
+                                accept=".pdf,.doc,.docx"
+                            >
+                        </div>
+
+                        <!-- Selected file confirmation -->
+                        <div class="resume-selected" id="resumeSelected" hidden>
+
+                            <div class="resume-file-icon">
+                                <svg viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <path d="M14 2v6h6"/>
+                                    <path d="M8 13h8"/>
+                                    <path d="M8 17h5"/>
+                                </svg>
+                            </div>
+
+                            <div class="resume-file-info">
+                                <strong id="resumeFileName">Resume.pdf</strong>
+                                <span id="resumeFileMeta">Ready for interview</span>
+                            </div>
+
+                            <button
+                                type="button"
+                                class="resume-remove"
+                                id="resumeRemove"
+                                aria-label="Remove resume"
+                            >
+                                ×
+                            </button>
+
+                        </div>
+
+                        <p class="resume-error" id="resumeError" hidden></p>
+                    </div>
+                </div>
+
+                <!-- SECTION 2 : LEVEL -->
+                <div class="section">
+                    <div class="section-head">
+                        <div class="section-num">02</div>
+                        <div>
+                            <div class="section-title">Experience & difficulty</div>
+                            <div class="section-sub">We'll calibrate depth, jargon and edge cases to match.</div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Experience level</label>
+                            <select name="experience_level">
+
+                                <option value="intern">Intern</option>
+
+                                <option value="entry">
+                                    Entry Level
+                                </option>
+
+                                <option value="mid" selected>
+                                    Mid Level
+                                </option>
+
+                                <option value="senior">
+                                    Senior
+                                </option>
+
+                                <option value="lead">
+                                    Lead
+                                </option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Difficulty</label>
+                            <select name="difficulty">
+                                <option value="easy">
+                                    Easy
+                                </option>
+
+                                <option value="medium" selected>
+                                    Medium
+                                </option>
+
+                                <option value="hard">
+                                    Hard
+                                </option>
+                        </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 3 : TYPE -->
+                <div class="section">
+                    <div class="section-head">
+                        <div class="section-num">03</div>
+                        <div>
+                            <div class="section-title">Interview format</div>
+                            <div class="section-sub">Pick the style your real interview will follow.</div>
+                        </div>
+                    </div>
+
+                    <div class="type-grid">
+                        <label class="choice">
+                            <input type="radio" name="interview_type" value="behavioral">
+                            <div class="choice-box">
+                                <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                                <div class="name">Behavioral</div>
+                                <div class="desc">STAR stories, teamwork, leadership.</div>
+                            </div>
+                        </label>
+
+                        <label class="choice">
+                            <input type="radio" name="interview_type" value="technical">
+                            <div class="choice-box">
+                                <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></div>
+                                <div class="name">Technical</div>
+                                <div class="desc">Coding, systems, deep-dive on skills.</div>
+                            </div>
+                        </label>
+
+                        <label class="choice">
+                            <input type="radio" checked name="interview_type" value="mixed">
+                            <div class="choice-box">
+                                <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg></div>
+                                <div class="name">Mixed</div>
+                                <div class="desc">Balanced — most realistic loop.</div>
+                            </div>
+                        </label>
+
+                        <label class="choice">
+                            <input type="radio" name="interview_type" value="system_design">
+                            <div class="choice-box">
+                                <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+                                <div class="name">HR Screen</div>
+                                <div class="desc">Fit, motivation, salary framing.</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- SECTION 4 : QUESTIONS -->
+                <div class="section">
+                    <div class="section-head">
+                        <div class="section-num">04</div>
+                        <div>
+                            <div class="section-title">Number of questions</div>
+                            <div class="section-sub">Short sprint or a full-length loop — you choose.</div>
+                        </div>
+                    </div>
+
+                    <div class="pills">
+                        <label class="pill"><input type="radio" name="question_count" value="5"><span>5</span></label>
+                        <label class="pill"><input type="radio" name="question_count" value="10" checked><span>10</span></label>
+                        <label class="pill"><input type="radio" name="question_count" value="15"><span>15</span></label>
+                        <label class="pill"><input type="radio" name="question_count" value="20"><span>20</span></label>
+                        <label class="pill"><input type="radio" name="question_count" value="30"><span>30</span></label>
+                    </div>
+                </div>
+
+                <!-- SUBMIT -->
+                <div class="submit-bar">
+                    <div class="submit-note">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        Your responses are private and never shared with employers.
+                    </div>
+
+                    <button class="start-btn" type="submit">
+                        Start AI Interview
+                        <span class="arrow">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                        </span>
+                    </button>
+                </div>
+                
+            </form>
+
+            
+
+        </div>
+    </main>
+
+</div>
+{% endblock %}
+
+
+
+</body>
+</html>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const input = document.getElementById("resumeInput");
+    const upload = document.getElementById("resumeUpload");
+    const icon = document.getElementById("resumeIcon");
+    const title = document.getElementById("resumeTitle");
+    const sub = document.getElementById("resumeSub");
+
+    const selected = document.getElementById("resumeSelected");
+    const fileName = document.getElementById("resumeFileName");
+    const fileMeta = document.getElementById("resumeFileMeta");
+
+    const removeBtn = document.getElementById("resumeRemove");
+    const error = document.getElementById("resumeError");
+
+    const MAX_SIZE = 5 * 1024 * 1024;
+
+    const allowedExtensions = [
+        "pdf",
+        "doc",
+        "docx"
+    ];
+
+    function formatFileSize(bytes) {
+        if (bytes < 1024) {
+            return bytes + " B";
+        }
+
+        if (bytes < 1024 * 1024) {
+            return (bytes / 1024).toFixed(1) + " KB";
+        }
+
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+    }
+
+    function resetUpload() {
+
+        input.value = "";
+
+        upload.classList.remove("uploaded");
+        selected.hidden = true;
+
+        title.textContent =
+            "Drop your PDF or Word file here";
+
+        sub.textContent =
+            "or click to browse — max 5MB";
+
+        error.hidden = true;
+        error.textContent = "";
+    }
+
+    function showError(message) {
+
+        error.textContent = message;
+        error.hidden = false;
+
+        upload.classList.remove("uploaded");
+        selected.hidden = true;
+    }
+
+    function handleFile(file) {
+
+        if (!file) {
+            return;
+        }
+
+        error.hidden = true;
+        error.textContent = "";
+
+        const extension = file.name
+            .split(".")
+            .pop()
+            .toLowerCase();
+
+        if (!allowedExtensions.includes(extension)) {
+
+            showError(
+                "Please upload a PDF, DOC, or DOCX file."
+            );
+
+            input.value = "";
+            return;
+        }
+
+        if (file.size > MAX_SIZE) {
+
+            showError(
+                "This file is larger than 5MB. Please choose a smaller resume."
+            );
+
+            input.value = "";
+            return;
+        }
+
+        /* Successful upload */
+
+        upload.classList.add("uploaded");
+
+        title.textContent = "Resume uploaded successfully";
+
+        sub.textContent =
+            "Click here if you want to replace it";
+
+        fileName.textContent = file.name;
+
+        fileMeta.textContent =
+            `${formatFileSize(file.size)} · Ready for interview`;
+
+        selected.hidden = false;
+    }
+
+    input.addEventListener("change", function () {
+
+        const file = this.files[0];
+
+        handleFile(file);
+
+    });
+
+    removeBtn.addEventListener("click", function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        resetUpload();
+
+    });
+
+    /* Drag & drop */
+
+    ["dragenter", "dragover"].forEach(function (eventName) {
+
+        upload.addEventListener(eventName, function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            upload.classList.add("dragover");
+
+        });
+
+    });
+
+    ["dragleave", "drop"].forEach(function (eventName) {
+
+        upload.addEventListener(eventName, function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            upload.classList.remove("dragover");
+
+        });
+
+    });
+
+    upload.addEventListener("drop", function (event) {
+
+        const files = event.dataTransfer.files;
+
+        if (!files.length) {
+            return;
+        }
+
+        /*
+         * Assign dropped file to the actual input
+         * so Django receives it when the form submits.
+         */
+
+        try {
+
+            const dataTransfer = new DataTransfer();
+
+            dataTransfer.items.add(files[0]);
+
+            input.files = dataTransfer.files;
+
+        } catch (e) {
+
+            console.warn(
+                "Could not assign dropped file to input.",
+                e
+            );
+
+        }
+
+        handleFile(files[0]);
+
+    });
+
+});
+</script>

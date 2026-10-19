@@ -1,0 +1,223 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+
+<aside class="sidebar">
+
+    <!-- =========================
+         TOP / LOGO
+    ========================== -->
+    <div class="sidebar-top">
+
+        <a href="http://localhost:8080/dashboard" class="logo">
+
+            <div class="logo-icon">
+                <i class="bi bi-stars"></i>
+            </div>
+
+            <div class="logo-text">
+                <h3>Career<em>ly</em></h3>
+                <small>AI Career Assistant</small>
+            </div>
+
+        </a>
+
+        <!-- Django Mock Interview -->
+        <a
+            href="http://127.0.0.1:8000/interview/"
+            class="new-btn"
+        >
+            <i class="bi bi-plus-lg"></i>
+            <span>New Interview</span>
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         WORKSPACE
+    ========================== -->
+    <div class="sidebar-group">
+
+        <span class="group-title">
+            Workspace
+        </span>
+
+        <nav>
+
+            <!-- React Dashboard -->
+            <a
+                href="http://localhost:8080/dashboard"
+                class="nav-item"
+            >
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+
+
+            <!-- Django CV Analyzer -->
+            <a
+                href="http://127.0.0.1:8000/analyzer/cv/"
+                class="nav-item"
+            >
+                <i class="bi bi-file-earmark-bar-graph-fill"></i>
+                <span>CV Analyzer</span>
+            </a>
+
+            <!-- Django Mock Interview -->
+            <a
+                href="http://127.0.0.1:8000/interview/"
+                class="nav-item active"
+            >
+                <i class="bi bi-mic-fill"></i>
+                <span>Mock Interview</span>
+            </a>
+
+
+            <!-- React Scholarships -->
+            <a
+                href="http://localhost:8080/dashboard/scholarships"
+                class="nav-item"
+            >
+                <i class="bi bi-mortarboard-fill"></i>
+                <span>Scholarships</span>
+
+                <span class="badge-count">
+                    12
+                </span>
+            </a>
+
+
+            <!-- React Job Matches -->
+            <a
+                href="http://localhost:8080/jobs"
+                class="nav-item"
+            >
+                <i class="bi bi-briefcase-fill"></i>
+                <span>Job Matches</span>
+
+                <span class="badge-count">
+                    12
+                </span>
+            </a>
+
+
+            <!-- React AI Advisor -->
+            <a
+                href="http://localhost:8080/dashboard/coach"
+                class="nav-item"
+            >
+                <i class="bi bi-stars"></i>
+                <span>AI Advisor</span>
+
+                <span class="badge-count">
+                    New
+                </span>
+            </a>
+
+        </nav>
+
+    </div>
+
+
+    <!-- =========================
+         ACCOUNT
+    ========================== -->
+    <div class="sidebar-group">
+
+        <span class="group-title">
+            Account
+        </span>
+
+        <nav>
+
+            <!-- React Profile -->
+            <a
+                href="http://localhost:8080/profile"
+                class="nav-item"
+            >
+                <i class="bi bi-person-fill"></i>
+                <span>Profile</span>
+            </a>
+
+
+            <!-- React Settings -->
+            <a
+                href="http://localhost:8080/settings"
+                class="nav-item"
+            >
+                <i class="bi bi-gear-fill"></i>
+                <span>Settings</span>
+            </a>
+
+        </nav>
+
+    </div>
+
+
+    <!-- =========================
+         UPGRADE CARD
+    ========================== -->
+    <div class="sidebar-upgrade">
+
+        <div class="upgrade-icon">
+            <i class="bi bi-crown-fill"></i>
+        </div>
+
+        <h3>
+            Upgrade to Pro
+        </h3>
+
+        <p>
+            Unlimited AI interviews, premium resume reviews,
+            scholarship matching and advanced coaching.
+        </p>
+
+        <button type="button">
+            Upgrade Now
+        </button>
+
+    </div>
+
+
+    <!-- =========================
+         USER
+    ========================== -->
+    <div class="sidebar-user">
+
+        <div class="avatar">
+            BR
+        </div>
+
+        <div class="user-info">
+
+            <strong>
+                Big Remo
+            </strong>
+
+            <span class="plan-badge">
+                <i class="bi bi-stars"></i>
+                AI Engineer
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         LOGOUT
+    ========================== -->
+    <div class="sidebar-footer">
+
+        <a
+            href="http://127.0.0.1:8000/login/"
+            class="logout-btn"
+        >
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Logout</span>
+        </a>
+
+    </div>
+
+</aside>

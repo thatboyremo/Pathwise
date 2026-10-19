@@ -1,0 +1,507 @@
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/career_chat.css' %}">
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<div class="app">
+
+    <!-- ========================= -->
+    <!-- MAIN SIDEBAR -->
+    <!-- ========================= -->
+
+    {% include "partials/sidebar.html" %}
+
+    <!-- ========================= -->
+    <!-- CHAT PAGE -->
+    <!-- ========================= -->
+
+    <main class="career-chat">
+
+        <!-- ===================================== -->
+        <!-- LEFT CONVERSATION SIDEBAR -->
+        <!-- ===================================== -->
+
+        <aside class="chat-sidebar">
+
+            <!-- NEW CHAT BUTTON -->
+
+            <a
+                href="{% url 'ai_chat:new_chat' %}"
+                class="new-chat-btn">
+
+                <i class="fa-solid fa-plus"></i>
+
+                <span>
+
+                    New Chat
+
+                </span>
+
+            </a>
+
+            <!-- SEARCH -->
+
+            <div class="chat-search">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    placeholder="Search conversations...">
+
+            </div>
+
+            <!-- HISTORY TITLE -->
+
+            <div class="history-title">
+
+                Recent Conversations
+
+            </div>
+
+            <!-- CONVERSATIONS -->
+
+            <div class="conversation-list">
+
+                {% for session in sessions %}
+
+                    <a
+
+                        href="{% url 'ai_chat:chat_session' session.id %}"
+
+                        class="conversation-item
+                        {% if current_session and current_session.id == session.id %}
+                        active
+                        {% endif %}">
+
+                        <div class="conversation-icon">
+
+                            <i class="fa-solid fa-message"></i>
+
+                        </div>
+
+                        <div class="conversation-info">
+
+                            <div class="conversation-title">
+
+                                {{ session.title }}
+
+                            </div>
+
+                            <small>
+
+                                {{ session.updated_at|date:"M d, H:i" }}
+
+                            </small>
+
+                        </div>
+
+                    </a>
+
+                {% empty %}
+
+                    <div class="empty-chat-list">
+
+                        <i class="fa-regular fa-comments"></i>
+
+                        <p>
+
+                            No conversations yet.
+
+                        </p>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </aside>
+
+        <!-- ===================================== -->
+        <!-- CHAT AREA -->
+        <!-- ===================================== -->
+
+        <section class="chat-area">
+
+            <!-- ========================= -->
+            <!-- HEADER -->
+            <!-- ========================= -->
+
+            <header class="chat-header">
+
+                <div class="header-left">
+
+                    <div class="ai-avatar">
+
+                        <i class="fa-solid fa-robot"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h2>
+
+                            Nova AI Career Assistant
+
+                        </h2>
+
+                        <p>
+
+                            Resume • Career • Coding • Interviews • Scholarships
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="header-right">
+
+                    <span class="status online">
+
+                        <i class="fa-solid fa-circle"></i>
+
+                        Online
+
+                    </span>
+
+                </div>
+
+            </header>
+
+            <!-- ========================= -->
+            <!-- CHAT MESSAGES -->
+            <!-- (Part 2 starts here) -->
+            <!-- ========================= -->
+
+            <div
+                class="chat-messages"
+                id="chatMessages">
+                        {% if current_session %}
+
+                {% if messages %}
+
+                    {% for message in messages %}
+
+                        {% if message.role == "user" %}
+
+                            <!-- ========================= -->
+                            <!-- USER MESSAGE -->
+                            <!-- ========================= -->
+
+                            <div class="message user">
+
+                                <div class="message-content">
+
+                                    <div class="bubble">
+
+                                        {{ message.content|linebreaksbr }}
+
+                                    </div>
+
+                                    <div class="message-time">
+
+                                        {{ message.created_at|date:"H:i" }}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        {% else %}
+
+                            <!-- ========================= -->
+                            <!-- NOVA MESSAGE -->
+                            <!-- ========================= -->
+
+                            <div class="message assistant">
+
+                                <div class="avatar">
+
+                                    <i class="fa-solid fa-robot"></i>
+
+                                </div>
+
+                                <div class="message-content">
+
+                                    <div class="bubble">
+
+                                        {{ message.content|linebreaksbr }}
+
+                                    </div>
+
+                                    <div class="message-time">
+
+                                        {{ message.created_at|date:"H:i" }}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <!-- ===================================== -->
+                    <!-- FIRST CHAT -->
+                    <!-- ===================================== -->
+
+                    <div class="message assistant">
+
+                        <div class="avatar">
+
+                            <i class="fa-solid fa-robot"></i>
+
+                        </div>
+
+                        <div class="message-content">
+
+                            <div class="bubble welcome">
+
+                                <h2>
+
+                                    👋 Welcome!
+
+                                </h2>
+
+                                <p>
+
+                                    I'm <strong>Nova</strong>,
+                                    your AI Career Assistant.
+
+                                </p>
+
+                                <br>
+
+                                <p>
+
+                                    I can help you with:
+
+                                </p>
+
+                                <div class="welcome-grid">
+
+                                    <div class="welcome-card">
+
+                                        <i class="fa-solid fa-file-lines"></i>
+
+                                        <span>
+
+                                            Resume Review
+
+                                        </span>
+
+                                    </div>
+
+                                    <div class="welcome-card">
+
+                                        <i class="fa-solid fa-briefcase"></i>
+
+                                        <span>
+
+                                            Job Preparation
+
+                                        </span>
+
+                                    </div>
+
+                                    <div class="welcome-card">
+
+                                        <i class="fa-solid fa-code"></i>
+
+                                        <span>
+
+                                            Programming Help
+
+                                        </span>
+
+                                    </div>
+
+                                    <div class="welcome-card">
+
+                                        <i class="fa-solid fa-graduation-cap"></i>
+
+                                        <span>
+
+                                            Scholarships
+
+                                        </span>
+
+                                    </div>
+
+                                    <div class="welcome-card">
+
+                                        <i class="fa-solid fa-microphone"></i>
+
+                                        <span>
+
+                                            Mock Interviews
+
+                                        </span>
+
+                                    </div>
+
+                                    <div class="welcome-card">
+
+                                        <i class="fa-solid fa-road"></i>
+
+                                        <span>
+
+                                            Career Roadmaps
+
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                                <br>
+
+                                <p>
+
+                                    Ask me anything to get started.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            {% else %}
+
+                <!-- ===================================== -->
+                <!-- NO CHAT SELECTED -->
+                <!-- ===================================== -->
+
+                <div class="empty-screen">
+
+                    <div class="empty-icon">
+
+                        <i class="fa-solid fa-comments"></i>
+
+                    </div>
+
+                    <h1>
+
+                        Welcome to Nova
+
+                    </h1>
+
+                    <p>
+
+                        Your AI Career Assistant.
+
+                    </p>
+
+                    <p>
+
+                        Start a new conversation to receive
+                        personalized career guidance.
+
+                    </p>
+
+                    <a
+
+                        href="{% url 'ai_chat:new_chat' %}"
+
+                        class="start-chat-btn">
+
+                        <i class="fa-solid fa-plus"></i>
+
+                        Start New Chat
+
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+                </div>
+
+                    <!-- ========================= -->
+                <!-- CHAT COMPOSER -->
+                <!-- ========================= -->
+
+                {% if current_session %}
+
+                <form
+                    id="chatForm"
+                    class="chat-composer"
+                    data-session="{{ current_session.id }}">
+
+                    {% csrf_token %}
+
+                    <div class="composer-wrapper">
+
+                        <textarea
+                            id="messageInput"
+                            name="message"
+                            rows="1"
+                            placeholder="Ask Nova anything... (Shift + Enter for a new line)"></textarea>
+
+                        <button
+                            type="submit"
+                            id="sendButton"
+                            class="send-btn">
+
+                            <i class="fa-solid fa-paper-plane"></i>
+
+                        </button>
+
+                    </div>
+
+                    <div class="composer-footer">
+
+                        <span>
+
+                            <i class="fa-solid fa-circle-info"></i>
+
+                            Nova can help with resumes, coding, interviews,
+                            scholarships, university applications and career planning.
+
+                        </span>
+
+                    </div>
+
+                </form>
+
+                {% endif %}
+
+            </section>
+
+        </main>
+
+    </div>
+
+            <!-- ====================================== -->
+            <!-- CHAT DATA -->
+            <!-- ====================================== -->
+
+            {% if current_session %}
+
+            <div
+                id="chat-data"
+                data-session="{{ current_session.id }}">
+            </div>
+
+            {% endif %}
+
+            <script src="{% static 'js/career_chat.js' %}"></script>
+
+            {% endblock %}

@@ -1,0 +1,1808 @@
+{% load static %}
+{% block content %}
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI Career Assistant — Mock Interview</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif&display=swap"
+    rel="stylesheet"
+>
+
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/mock_interview.css' %}">
+
+<div class="app">
+
+    <main class="main">
+
+        <!-- =====================================================
+             TOPBAR
+        ====================================================== -->
+
+        <header class="topbar">
+
+            <div class="title">
+
+                <div class="mark">
+                    <i class="fa-solid fa-microphone-lines"></i>
+                </div>
+
+                <div>
+
+                    <h2>
+                        {{ session.job_title }}
+                        <em>Interview</em>
+                    </h2>
+
+                    <small>
+                        {{ session.company_name }} •
+                        {{ session.get_interview_type_display }} •
+                        {{ session.get_experience_level_display }}
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <span class="pill live">
+                    <i class="fa-solid fa-circle"></i>
+                    Live
+                </span>
+
+                <span class="pill progress">
+
+                    Question
+
+                    <b id="current-number">
+                        {{ session.current_question }}
+                    </b>
+
+                    /
+
+                    <b id="total-number">
+                        {{ session.question_count }}
+                    </b>
+
+                </span>
+
+            </div>
+
+        </header>
+
+
+        <!-- =====================================================
+             PROGRESS RAIL
+        ====================================================== -->
+
+        <section class="rail">
+
+            <div class="rail-track">
+
+                <div
+                    id="railFill"
+                    class="rail-fill"
+                    style="width: {% widthratio session.current_question session.question_count 100 %}%"
+                ></div>
+
+            </div>
+
+            <div class="rail-meta">
+
+                <span>
+                    Session Progress
+                </span>
+
+                <span id="progress-text">
+                    {% widthratio session.current_question session.question_count 100 %}%
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CHAT
+        ====================================================== -->
+
+        <section class="chat" id="chat">
+
+            {% for q in questions %}
+
+                <!-- AI QUESTION -->
+
+                <div class="message ai">
+
+                    <div class="avatar">
+                        N
+                    </div>
+
+                    <div class="message-content">
+
+                        <div class="bubble">
+
+                            <span class="q-tag">
+                                Question {{ q.question_number }}
+                            </span>
+
+                            <p>
+                                {{ q.question }}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- USER ANSWER -->
+
+                {% if q.answer %}
+
+                    <div class="message user">
+
+                        <div class="avatar">
+                            YOU
+                        </div>
+
+                        <div class="message-content">
+
+                            <div class="bubble">
+                                {{ q.answer.answer }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- AI FEEDBACK -->
+
+                    <div class="message ai">
+
+                        <div class="avatar">
+                            N
+                        </div>
+
+                        <div class="message-content">
+
+                            <div class="bubble">
+
+                                <strong>
+                                    AI Feedback
+                                </strong>
+
+                                <p>
+                                    {{ q.answer.feedback }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </section>
+
+
+        <!-- =====================================================
+             INTERVIEW COMPOSER
+        ====================================================== -->
+
+        <div class="bottom">
+
+
+            <!-- QUICK ACTIONS -->
+
+            <div class="quick-chips">
+
+                <button
+                    type="button"
+                    class="chip"
+                    onclick="quickInsert('Can you rephrase the question?')"
+                >
+                    Rephrase
+                </button>
+
+                <button
+                    type="button"
+                    class="chip"
+                    onclick="quickInsert('Can you give me a hint?')"
+                >
+                    Hint
+                </button>
+
+                <button
+                    type="button"
+                    class="chip"
+                    onclick="quickInsert('STAR')"
+                >
+                    STAR
+                </button>
+
+                <button
+                    type="button"
+                    class="chip"
+                    id="pause-btn"
+                >
+                    Pause
+                </button>
+
+            </div>
+
+
+            <!-- =================================================
+                 ANSWER FORM
+            ================================================== -->
+
+            <form
+                method="POST"
+                class="answer-form"
+                id="answerForm"
+                action=""
+            >
+
+                {% csrf_token %}
+
+
+                <div class="input-wrapper">
+
+
+                    <!-- ANSWER TEXTAREA -->
+
+                    <textarea
+                        id="answer"
+                        name="answer"
+                        class="answer-input"
+                        placeholder="Type your answer..."
+                        rows="1"
+                        autocomplete="off"
+                        required
+                    ></textarea>
+
+
+                    <!-- INPUT ACTIONS -->
+
+                    <div class="input-actions">
+
+
+                        <!-- MIC -->
+
+                        <button
+                            type="button"
+                            class="mic-btn"
+                            id="mic-btn"
+                            title="Voice input"
+                            aria-label="Voice input"
+                        >
+
+                            <i class="fa-solid fa-microphone"></i>
+
+                        </button>
+
+
+                        <!-- SEND -->
+
+                        <button
+                            type="submit"
+                            class="send-btn"
+                            id="send-btn"
+                        >
+
+                            <span class="send-label">
+                                Send
+                            </span>
+
+                            <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+
+                                <path d="M5 12h14"></path>
+
+                                <path d="M13 5l7 7-7 7"></path>
+
+                            </svg>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- HELPER -->
+
+                <div class="helper">
+
+                    <span>
+                        Press
+                        <kbd>Enter</kbd>
+                        to send
+                    </span>
+
+                    <span>
+                        <kbd>Shift</kbd>
+                        +
+                        <kbd>Enter</kbd>
+                        for a new line
+                    </span>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+
+    <!-- =====================================================
+         SESSION DATA
+    ====================================================== -->
+
+    <div
+        id="interview-data"
+        data-session="{{ session.id }}"
+    ></div>
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+"use strict";
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const chat = document.getElementById("chat");
+
+const form = document.getElementById("answerForm");
+
+const textarea = document.getElementById("answer");
+
+const sendBtn = document.getElementById("send-btn");
+
+const interviewData =
+    document.getElementById("interview-data");
+
+const sessionId =
+    interviewData?.dataset.session;
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let sending = false;
+
+let interviewPaused = false;
+
+
+/* =========================================================
+   CSRF
+========================================================= */
+
+function getCookie(name) {
+
+    let cookieValue = null;
+
+    if (document.cookie && document.cookie !== "") {
+
+        const cookies =
+            document.cookie.split(";");
+
+        for (let cookie of cookies) {
+
+            cookie = cookie.trim();
+
+            if (
+                cookie.startsWith(name + "=")
+            ) {
+
+                cookieValue =
+                    decodeURIComponent(
+                        cookie.substring(
+                            name.length + 1
+                        )
+                    );
+
+                break;
+
+            }
+
+        }
+
+    }
+
+    return cookieValue;
+
+}
+
+
+const csrftoken = getCookie("csrftoken");
+
+
+/* =========================================================
+   SCROLL
+========================================================= */
+
+function scrollToBottom() {
+
+    if (!chat) return;
+
+    chat.scrollTo({
+
+        top: chat.scrollHeight,
+
+        behavior: "smooth"
+
+    });
+
+}
+
+
+/* =========================================================
+   TEXTAREA
+========================================================= */
+
+function autoGrow() {
+
+    if (!textarea) return;
+
+    textarea.style.height = "auto";
+
+    textarea.style.height =
+        Math.min(
+            textarea.scrollHeight,
+            150
+        ) + "px";
+
+}
+
+
+if (textarea) {
+
+    textarea.addEventListener(
+        "input",
+        autoGrow
+    );
+
+}
+
+
+/* =========================================================
+   ENTER TO SEND
+========================================================= */
+
+if (textarea) {
+
+    textarea.addEventListener(
+        "keydown",
+        function (event) {
+
+            /*
+             * Enter = Send
+             *
+             * Shift + Enter = New line
+             */
+
+            if (
+                event.key === "Enter" &&
+                !event.shiftKey &&
+                !event.isComposing
+            ) {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                sendAnswer();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   FORM SUBMIT
+========================================================= */
+
+if (form) {
+
+    form.addEventListener(
+        "submit",
+        function (event) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            sendAnswer();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   QUICK INSERT
+========================================================= */
+
+window.quickInsert = function(text) {
+
+    if (!textarea) return;
+
+    if (textarea.value.trim()) {
+
+        textarea.value +=
+            " " + text;
+
+    } else {
+
+        textarea.value = text;
+
+    }
+
+    textarea.focus();
+
+    autoGrow();
+
+};
+
+
+/* =========================================================
+   PAUSE
+========================================================= */
+
+const pauseBtn =
+    document.getElementById("pause-btn");
+
+if (pauseBtn) {
+
+    pauseBtn.addEventListener(
+        "click",
+        function () {
+
+            interviewPaused =
+                !interviewPaused;
+
+            if (interviewPaused) {
+
+                pauseBtn.textContent =
+                    "Resume";
+
+                textarea.disabled = true;
+
+            } else {
+
+                pauseBtn.textContent =
+                    "Pause";
+
+                textarea.disabled = false;
+
+                textarea.focus();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+function startLoading() {
+
+    if (!sendBtn) return;
+
+    sendBtn.disabled = true;
+
+    sendBtn.innerHTML = `
+
+        <i class="fa-solid fa-spinner fa-spin"></i>
+
+        <span class="send-label">
+            Thinking...
+        </span>
+
+    `;
+
+}
+
+
+function stopLoading() {
+
+    if (!sendBtn) return;
+
+    sendBtn.disabled = false;
+
+    sendBtn.innerHTML = `
+
+        <span class="send-label">
+            Send
+        </span>
+
+        <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        >
+
+            <path d="M5 12h14"></path>
+
+            <path d="M13 5l7 7-7 7"></path>
+
+        </svg>
+
+    `;
+
+}
+
+
+/* =========================================================
+   TYPING
+========================================================= */
+
+function showTyping() {
+
+    if (!chat) return;
+
+    chat.insertAdjacentHTML(
+
+        "beforeend",
+
+        `
+
+        <div
+            class="message ai"
+            id="typing"
+        >
+
+            <div class="avatar">
+                N
+            </div>
+
+            <div class="message-content">
+
+                <div class="bubble">
+
+                    <i class="fa-solid fa-ellipsis"></i>
+
+                    Nova is typing...
+
+                </div>
+
+            </div>
+
+        </div>
+
+        `
+
+    );
+
+    scrollToBottom();
+
+}
+
+
+function removeTyping() {
+
+    document
+        .getElementById("typing")
+        ?.remove();
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(value) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = value;
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================================
+   USER MESSAGE
+========================================================= */
+
+function renderUserMessage(answer) {
+
+    if (!chat) return;
+
+    const safeAnswer =
+        escapeHtml(answer);
+
+    chat.insertAdjacentHTML(
+
+        "beforeend",
+
+        `
+
+        <div class="message user">
+
+            <div class="avatar">
+                YOU
+            </div>
+
+            <div class="message-content">
+
+                <div class="bubble">
+                    ${safeAnswer}
+                </div>
+
+            </div>
+
+        </div>
+
+        `
+
+    );
+
+    scrollToBottom();
+
+}
+
+
+/* =========================================================
+   SEND ANSWER
+========================================================= */
+
+async function sendAnswer() {
+
+    /*
+     * Prevent duplicate submissions
+     */
+
+    if (sending) return;
+
+    if (interviewPaused) return;
+
+    if (!sessionId) {
+
+        console.error(
+            "Interview session ID missing."
+        );
+
+        alert(
+            "Interview session ID not found."
+        );
+
+        return;
+
+    }
+
+
+    if (!textarea) {
+
+        console.error(
+            "Answer textarea not found."
+        );
+
+        return;
+
+    }
+
+
+    const answer =
+        textarea.value.trim();
+
+
+    /*
+     * Don't submit empty answers
+     */
+
+    if (!answer) {
+
+        textarea.focus();
+
+        return;
+
+    }
+
+
+    sending = true;
+
+
+    /*
+     * Save answer
+     */
+
+    const userAnswer = answer;
+
+
+    /*
+     * Disable sending
+     */
+
+    startLoading();
+
+
+    /*
+     * Show user's answer
+     */
+
+    renderUserMessage(
+        userAnswer
+    );
+
+
+    /*
+     * Clear input
+     */
+
+    textarea.value = "";
+
+    autoGrow();
+
+
+    /*
+     * Typing indicator
+     */
+
+    showTyping();
+
+
+    try {
+
+        /*
+         * Django endpoint
+         */
+
+        const url =
+            `/interview/${encodeURIComponent(sessionId)}/submit/`;
+
+
+        console.log(
+            "Submitting answer to:",
+            url
+        );
+
+
+        const response =
+            await fetch(
+                url,
+                {
+
+                    method: "POST",
+
+                    credentials: "same-origin",
+
+                    headers: {
+
+                        "X-CSRFToken":
+                            csrftoken || "",
+
+                        "Content-Type":
+                            "application/x-www-form-urlencoded; charset=UTF-8",
+
+                        "X-Requested-With":
+                            "XMLHttpRequest",
+
+                        "Accept":
+                            "application/json"
+
+                    },
+
+                    body:
+                        new URLSearchParams({
+
+                            answer:
+                                userAnswer
+
+                        })
+
+                }
+            );
+
+
+        /*
+         * Server error
+         */
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+            console.error(
+                "Server response:",
+                errorText
+            );
+
+            throw new Error(
+                `Server returned ${response.status}`
+            );
+
+        }
+
+
+        /*
+         * Parse JSON
+         */
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Interview Response:",
+            data
+        );
+
+
+        removeTyping();
+
+
+        /*
+         * Backend reported failure
+         */
+
+        if (!data.success) {
+
+            alert(
+                data.error ||
+                "Unable to submit answer."
+            );
+
+            /*
+             * Put answer back so user doesn't lose it
+             */
+
+            textarea.value =
+                userAnswer;
+
+            autoGrow();
+
+            textarea.focus();
+
+            return;
+
+        }
+
+
+        /*
+         * Feedback
+         */
+
+        renderFeedback(data);
+
+
+        /*
+         * Sidebar
+         */
+
+        updateSidebar(data);
+
+
+        /*
+         * Progress
+         */
+
+        updateProgress(data);
+
+
+        /*
+         * Next question
+         */
+
+        if (data.has_next) {
+
+            renderNextQuestion(data);
+
+        } else {
+
+            renderInterviewCompleted();
+
+        }
+
+
+        scrollToBottom();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Submit answer error:",
+            error
+        );
+
+        removeTyping();
+
+
+        /*
+         * Restore answer
+         */
+
+        textarea.value =
+            userAnswer;
+
+        autoGrow();
+
+
+        alert(
+            "Unable to send your answer.\n\n" +
+            "Please check your connection and try again."
+        );
+
+
+        textarea.focus();
+
+    }
+
+    finally {
+
+        sending = false;
+
+        stopLoading();
+
+    }
+
+}
+
+
+/* =========================================================
+   AI FEEDBACK
+========================================================= */
+
+function renderFeedback(data) {
+
+    let strengths = "";
+
+    if (
+        Array.isArray(data.strengths)
+    ) {
+
+        data.strengths.forEach(
+            item => {
+
+                strengths +=
+                    `<li>${escapeHtml(item)}</li>`;
+
+            }
+        );
+
+    }
+
+
+    let weaknesses = "";
+
+    if (
+        Array.isArray(data.weaknesses)
+    ) {
+
+        data.weaknesses.forEach(
+            item => {
+
+                weaknesses +=
+                    `<li>${escapeHtml(item)}</li>`;
+
+            }
+        );
+
+    }
+
+
+    chat.insertAdjacentHTML(
+
+        "beforeend",
+
+        `
+
+        <div class="message ai">
+
+            <div class="avatar">
+                N
+            </div>
+
+            <div class="message-content">
+
+                <div class="bubble feedback-card">
+
+                    <h4>
+                        AI Feedback
+                    </h4>
+
+                    <p>
+                        ${data.feedback || ""}
+                    </p>
+
+
+                    <div class="score-grid">
+
+                        <div class="score-box">
+
+                            <span>
+                                Overall
+                            </span>
+
+                            <strong>
+                                ${data.overall_score ?? 0}/100
+                            </strong>
+
+                        </div>
+
+
+                        <div class="score-box">
+
+                            <span>
+                                Technical
+                            </span>
+
+                            <strong>
+                                ${data.technical_score ?? 0}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="score-box">
+
+                            <span>
+                                Communication
+                            </span>
+
+                            <strong>
+                                ${data.communication_score ?? 0}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="score-box">
+
+                            <span>
+                                Confidence
+                            </span>
+
+                            <strong>
+                                ${data.confidence_score ?? 0}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="score-box">
+
+                            <span>
+                                Problem Solving
+                            </span>
+
+                            <strong>
+                                ${data.problem_solving_score ?? 0}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <hr>
+
+
+                    <details open>
+
+                        <summary>
+                            Strengths
+                        </summary>
+
+                        <ul>
+                            ${strengths}
+                        </ul>
+
+                    </details>
+
+
+                    <details>
+
+                        <summary>
+                            Areas to Improve
+                        </summary>
+
+                        <ul>
+                            ${weaknesses}
+                        </ul>
+
+                    </details>
+
+
+                    <details>
+
+                        <summary>
+                            Improved Answer
+                        </summary>
+
+                        <p>
+                            ${data.improved_answer || ""}
+                        </p>
+
+                    </details>
+
+
+                    <details>
+
+                        <summary>
+                            Professional Version
+                        </summary>
+
+                        <p>
+                            ${data.professional_version || ""}
+                        </p>
+
+                    </details>
+
+
+                    <details>
+
+                        <summary>
+                            FAANG Version
+                        </summary>
+
+                        <p>
+                            ${data.faang_version || ""}
+                        </p>
+
+                    </details>
+
+
+                    <details>
+
+                        <summary>
+                            Concise Version
+                        </summary>
+
+                        <p>
+                            ${data.concise_version || ""}
+                        </p>
+
+                    </details>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        `
+
+    );
+
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+function updateSidebar(data) {
+
+    const set =
+        (id, value) => {
+
+            const element =
+                document.getElementById(id);
+
+            if (element) {
+
+                element.textContent =
+                    value ?? 0;
+
+            }
+
+        };
+
+
+    set(
+        "overall-score",
+        data.overall_score
+    );
+
+    set(
+        "technical-score",
+        data.technical_score
+    );
+
+    set(
+        "communication-score",
+        data.communication_score
+    );
+
+    set(
+        "confidence-score",
+        data.confidence_score
+    );
+
+    set(
+        "problem-score",
+        data.problem_solving_score
+    );
+
+
+    const feedback =
+        document.getElementById(
+            "feedback-box"
+        );
+
+    if (feedback) {
+
+        feedback.innerHTML =
+            data.feedback || "";
+
+    }
+
+
+    const strengthBox =
+        document.getElementById(
+            "strength-box"
+        );
+
+    if (strengthBox) {
+
+        strengthBox.innerHTML = "";
+
+
+        if (
+            Array.isArray(data.strengths)
+        ) {
+
+            data.strengths.forEach(
+                item => {
+
+                    const tag =
+                        document.createElement(
+                            "div"
+                        );
+
+                    tag.className =
+                        "tag success";
+
+                    tag.textContent =
+                        `✓ ${item}`;
+
+                    strengthBox.appendChild(
+                        tag
+                    );
+
+                }
+            );
+
+        }
+
+    }
+
+
+    const weaknessBox =
+        document.getElementById(
+            "weakness-box"
+        );
+
+    if (weaknessBox) {
+
+        weaknessBox.innerHTML = "";
+
+
+        if (
+            Array.isArray(data.weaknesses)
+        ) {
+
+            data.weaknesses.forEach(
+                item => {
+
+                    const tag =
+                        document.createElement(
+                            "div"
+                        );
+
+                    tag.className =
+                        "tag warning";
+
+                    tag.textContent =
+                        `• ${item}`;
+
+                    weaknessBox.appendChild(
+                        tag
+                    );
+
+                }
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+function updateProgress(data) {
+
+    if (
+        !data.next_question_number
+    ) {
+
+        return;
+
+    }
+
+
+    const current =
+        document.getElementById(
+            "current-number"
+        );
+
+    const total =
+        document.getElementById(
+            "total-number"
+        );
+
+
+    if (!current || !total) {
+
+        return;
+
+    }
+
+
+    current.textContent =
+        data.next_question_number;
+
+
+    const totalQuestions =
+        Number(
+            total.textContent
+        );
+
+
+    const percent =
+        Math.round(
+
+            (
+                (
+                    data.next_question_number - 1
+                )
+                /
+                totalQuestions
+            )
+            * 100
+
+        );
+
+
+    const rail =
+        document.getElementById(
+            "railFill"
+        );
+
+    if (rail) {
+
+        rail.style.width =
+            percent + "%";
+
+    }
+
+
+    const progressText =
+        document.getElementById(
+            "progress-text"
+        );
+
+    if (progressText) {
+
+        progressText.textContent =
+            percent + "%";
+
+    }
+
+}
+
+
+/* =========================================================
+   NEXT QUESTION
+========================================================= */
+
+function renderNextQuestion(data) {
+
+    if (
+        !data.next_question
+    ) {
+
+        return;
+
+    }
+
+
+    chat.insertAdjacentHTML(
+
+        "beforeend",
+
+        `
+
+        <div class="message ai">
+
+            <div class="avatar">
+                N
+            </div>
+
+            <div class="message-content">
+
+                <div class="bubble">
+
+                    <span class="q-tag">
+
+                        Question
+                        ${data.next_question_number}
+
+                    </span>
+
+                    <p>
+                        ${data.next_question}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        `
+
+    );
+
+
+    textarea.disabled = false;
+
+    textarea.placeholder =
+        "Type your answer...";
+
+
+    textarea.focus();
+
+
+    scrollToBottom();
+
+}
+
+
+/* =========================================================
+   INTERVIEW COMPLETE
+========================================================= */
+
+function renderInterviewCompleted() {
+
+    chat.insertAdjacentHTML(
+
+        "beforeend",
+
+        `
+
+        <div class="message ai">
+
+            <div class="avatar">
+                N
+            </div>
+
+            <div class="message-content">
+
+                <div class="bubble success-bubble">
+
+                    <h3>
+                        🎉 Interview Complete!
+                    </h3>
+
+                    <p>
+                        Excellent work.
+                    </p>
+
+                    <p>
+                        Your complete AI report
+                        is now available.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        `
+
+    );
+
+
+    textarea.disabled = true;
+
+    textarea.placeholder =
+        "Interview completed.";
+
+
+    sendBtn.disabled = true;
+
+    sendBtn.innerHTML = `
+
+        <i class="fa-solid fa-check"></i>
+
+        <span class="send-label">
+            Completed
+        </span>
+
+    `;
+
+
+    scrollToBottom();
+
+}
+
+
+/* =========================================================
+   FINISH INTERVIEW
+========================================================= */
+
+const finishBtn =
+    document.getElementById(
+        "finish-btn"
+    );
+
+
+if (finishBtn) {
+
+    finishBtn.addEventListener(
+        "click",
+        function () {
+
+            const confirmEnd =
+                confirm(
+                    "End this interview now?"
+                );
+
+
+            if (!confirmEnd) {
+
+                return;
+
+            }
+
+
+            window.location.href =
+                `/interview/${sessionId}/result/`;
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   AUTO SCROLL
+========================================================= */
+
+if (chat) {
+
+    const observer =
+        new MutationObserver(
+            function () {
+
+                scrollToBottom();
+
+            }
+        );
+
+
+    observer.observe(
+        chat,
+        {
+            childList: true,
+            subtree: true
+        }
+    );
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+window.addEventListener(
+    "load",
+    function () {
+
+        scrollToBottom();
+
+        if (
+            textarea &&
+            !textarea.disabled
+        ) {
+
+            autoGrow();
+
+            textarea.focus();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   DEBUG CHECK
+========================================================= */
+
+console.log(
+    "Mock Interview initialized"
+);
+
+console.log(
+    "Session ID:",
+    sessionId
+);
+
+console.log(
+    "Form:",
+    form
+);
+
+console.log(
+    "Textarea:",
+    textarea
+);
+
+console.log(
+    "Send button:",
+    sendBtn
+);
+
+</script>
+
+{% endblock %}
